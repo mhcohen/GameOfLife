@@ -2,7 +2,6 @@ package hgl.task.game;
 
 import hgl.task.game.elements.GameGrid;
 import hgl.task.game.elements.GameGridFactory;
-import hgl.task.game.elements.MatrixGameGrid;
 
 public class GameOfLife {
 

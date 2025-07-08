@@ -53,4 +53,21 @@ class GameOfLifeTest {
 
         assertEquals(Collections.EMPTY_LIST, Arrays.asList(gameGrid.getState()));
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1, 1, 1, 2",
+            "1, 1, 2, 1",
+            "1, 1, 0, 1",
+            "1, 1, 1, 0",
+            "1, 1, -1, 1",
+            "1, 1, 1, -1",
+            "10, 10, 11, 5",
+            "10, 10, 5, 11",
+    })
+    void flip_attemptingToFlipAStateThatIsOutOfBounds_ThrowIllegalArgumentException(int height, int width, int y, int x) {
+        GameGrid gameGrid = gameOfLife.initialiseGameGrid(height, width);
+
+        assertThrows(IllegalArgumentException.class, () -> gameGrid.flip(y, x));
+    }
 }
