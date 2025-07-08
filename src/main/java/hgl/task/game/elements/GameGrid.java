@@ -1,0 +1,7 @@
+package hgl.task.game.elements;
+
+public interface GameGrid {
+
+    int height();
+    int width();
+}
