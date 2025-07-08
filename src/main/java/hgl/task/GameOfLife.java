@@ -1,7 +1,13 @@
 package hgl.task;
 
 public class GameOfLife {
-    public GameOfLife(int height, int width) {
-        throw new IllegalArgumentException("height and width should be non-negative");
+    public GameOfLife() {
+
+    }
+
+    public void initialise(int height, int width) {
+        if (height <= 0 || width <= 0) {
+            throw new IllegalArgumentException("height and width should be non-negative");
+        }
     }
 }
