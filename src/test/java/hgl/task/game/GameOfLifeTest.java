@@ -3,8 +3,12 @@ package hgl.task.game;
 import hgl.task.game.elements.GameGrid;
 import hgl.task.game.elements.MatrixGameGridFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,6 +47,10 @@ class GameOfLifeTest {
         );
     }
 
+    @Test
+    void getState_whenNoActiveCellsInGrid_ReturnEmptyArray() {
+        GameGrid gameGrid = gameOfLife.initialiseGameGrid(1, 1);
 
-
+        assertEquals(Collections.EMPTY_LIST, Arrays.asList(gameGrid.getState()));
+    }
 }

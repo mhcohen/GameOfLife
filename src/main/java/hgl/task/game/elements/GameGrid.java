@@ -4,4 +4,5 @@ public interface GameGrid {
 
     int height();
     int width();
+    int[][] getState();
 }
