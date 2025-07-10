@@ -2,6 +2,8 @@ package hgl.task.game;
 
 import hgl.task.game.elements.GameGrid;
 import hgl.task.game.elements.GameGridFactory;
+import hgl.task.game.elements.Height;
+import hgl.task.game.elements.Width;
 
 public class GameOfLife {
 
@@ -11,8 +13,8 @@ public class GameOfLife {
         this.gameGridFactory = gameGridFactory;
     }
 
-    public GameGrid initialiseGameGrid(int height, int width) {
-        if (height <= 0 || width <= 0) {
+    public GameGrid initialiseGameGrid(Height height, Width width) {
+        if (height.value() <= 0 || width.value() <= 0) {
             throw new IllegalArgumentException("height and width should be non-negative");
         }
         return gameGridFactory.getGameGrid(height, width);

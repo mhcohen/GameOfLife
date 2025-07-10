@@ -6,5 +6,5 @@ public interface GameGrid {
     int width();
     int[][] getState();
 
-    void flip(int y, int x);
+    void flip(Coordinate coordinate);
 }

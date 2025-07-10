@@ -9,10 +9,10 @@ public class MatrixGameGrid implements GameGrid {
     private final int width;
     private final boolean[][] grid;
 
-    public MatrixGameGrid(int height, int width) {
-        this.height = height;
-        this.width = width;
-        grid = new boolean[height][width];
+    public MatrixGameGrid(Height height, Width width) {
+        this.height = height.value();
+        this.width = width.value();
+        grid = new boolean[height.value()][width.value()];
     }
 
     @Override
@@ -29,10 +29,15 @@ public class MatrixGameGrid implements GameGrid {
     public int[][] getState() {
         List<int[]> state = new ArrayList<>();
 
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                if (grid[i][j]) {
-                    state.add(new int[]{i+1, j+1});
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (grid[y][x]) {
+                    // Based on the tests ran, it seems the task expects us to traverse the grid by height first.
+                    // For example. My test expected : [[5, 5], [6, 5], [7, 5], [5, 6], [6, 6], [7, 6]]
+                    // If I traverse by width and then height, I get: [[5, 5], [5, 6], [5, 7], [6, 5], [6, 6], [6, 7]]
+                    // Which are the correct values, but in the wrong order.
+                    // Only when I traverse by height first, but still output [X, Y] do I match the expected orders.
+                    state.add(new int[]{x + 1, y + 1});
                 }
             }
         }
@@ -41,20 +46,15 @@ public class MatrixGameGrid implements GameGrid {
     }
 
     @Override
-    public void flip(int y, int x) {
-        if (!isValidY(y) || !isValidX(x)) {
-            throw new IllegalArgumentException("y of %s should be in range 1...%s. x of %s should be in range of 1...%s.".formatted(y,x,width,height));
-        }
+    public void flip(Coordinate coordinate) {
+        validateCoordinate(coordinate);
 
-        grid[y-1][x-1] = !grid[y-1][x-1];
+        grid[coordinate.y()][coordinate.x()] = !grid[coordinate.y()][coordinate.x()];
     }
 
-    private boolean isValidY(int y) {
-        return y > 0 && y <= height;
-    }
-
-    private boolean isValidX(int x) {
-        return x > 0 && x <= width;
+    private void validateCoordinate(Coordinate coordinate) {
+        if (coordinate.x() >= width || coordinate.y() >= height)
+            throw new IllegalArgumentException("Coordinates must not be greater than width or height");
     }
 
     @Override
@@ -68,9 +68,9 @@ public class MatrixGameGrid implements GameGrid {
 
     private String gridToString() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                sb.append("%s".formatted(grid[i][j]));
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                sb.append("%s".formatted(grid[y][x]));
             }
             sb.append(System.lineSeparator());
         }
