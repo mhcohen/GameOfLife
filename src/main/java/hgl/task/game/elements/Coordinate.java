@@ -1,19 +1,39 @@
 package hgl.task.game.elements;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
- * 2D coordinate
- * @param x
- * @param y
+ * 2D coordinate.
+ * The coordinate is assumed to be 1 indexed
  */
 public record Coordinate(int x, int y) {
 
-    public Coordinate(int x, int y) {
-        if(x < 1 || y < 1) throw new IllegalArgumentException("Coordinates must not be negative");
-        this.x = x-1;
-        this.y = y-1;
+    private static final int[][] NEIGHBOUR_RELATIVE_COORDINATES = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
+
+    public List<Coordinate> getNeighbours() {
+        return Arrays.stream(NEIGHBOUR_RELATIVE_COORDINATES)
+                .map(neighbour -> new Coordinate(x + neighbour[0], y + neighbour[1]))
+                .toList();
     }
 
     public static Coordinate of(int x, int y) {
         return new Coordinate(x, y);
+    }
+
+    public int getXZeroIndexed() {
+        return x - 1;
+    }
+
+    public int getYZeroIndexed() {
+        return y - 1;
+    }
+
+    @Override
+    public String toString() {
+        return "Coordinate{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }

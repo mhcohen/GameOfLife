@@ -1,7 +1,10 @@
 package hgl.task.game.elements;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class MatrixGameGrid implements GameGrid {
 
@@ -49,17 +52,32 @@ public class MatrixGameGrid implements GameGrid {
     public void flip(Coordinate coordinate) {
         validateCoordinate(coordinate);
 
-        grid[coordinate.y()][coordinate.x()] = !grid[coordinate.y()][coordinate.x()];
+        grid[coordinate.getYZeroIndexed()][coordinate.getXZeroIndexed()] = !getCellAt(coordinate);
     }
 
     @Override
     public boolean[] getNeighbourhood(Coordinate coordinate) {
-        return new boolean[0];
+        return ArrayUtils.toPrimitive(coordinateToNeighbourhood(coordinate)
+                .map(this::getCellAt)
+                .toArray(Boolean[]::new));
+    }
+
+    private Stream<Coordinate> coordinateToNeighbourhood(Coordinate coordinate) {
+        return coordinate.getNeighbours().stream()
+                .filter(this::isValidCoordinate);
+    }
+
+    private boolean getCellAt(Coordinate coordinate) {
+        return grid[coordinate.getYZeroIndexed()][coordinate.getXZeroIndexed()];
     }
 
     private void validateCoordinate(Coordinate coordinate) {
-        if (coordinate.x() >= width || coordinate.y() >= height)
+        if (!isValidCoordinate(coordinate))
             throw new IllegalArgumentException("Coordinates must not be greater than width or height");
+    }
+
+    private boolean isValidCoordinate(Coordinate coordinate) {
+        return coordinate.getXZeroIndexed() >= 0 && coordinate.getXZeroIndexed() < width && coordinate.getYZeroIndexed() >= 0 && coordinate.getYZeroIndexed() < height;
     }
 
     @Override
