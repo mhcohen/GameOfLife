@@ -52,6 +52,11 @@ public class MatrixGameGrid implements GameGrid {
         grid[coordinate.y()][coordinate.x()] = !grid[coordinate.y()][coordinate.x()];
     }
 
+    @Override
+    public boolean[] getNeighbourhood(Coordinate coordinate) {
+        return new boolean[0];
+    }
+
     private void validateCoordinate(Coordinate coordinate) {
         if (coordinate.x() >= width || coordinate.y() >= height)
             throw new IllegalArgumentException("Coordinates must not be greater than width or height");

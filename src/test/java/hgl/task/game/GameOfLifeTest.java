@@ -111,6 +111,22 @@ class GameOfLifeTest {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("neighbourScenarios")
+    void getNeighbourhood_WhenSuppliedAValidCoordinate_ReturnAllNeighboursStates(boolean[] expected, Height height, Width width, Coordinate coordinate) {
+        GameGrid gameGrid = gameOfLife.initialiseGameGrid(height, width);
+
+        boolean[] result = gameGrid.getNeighbourhood(coordinate);
+
+        assertArrayEquals(expected, result);
+    }
+
+    public static Stream<Arguments> neighbourScenarios() {
+        return Stream.of(
+                Arguments.of(new boolean[0], Height.of(1), Width.of(1), Coordinate.of(1, 1))
+        );
+    }
+
     public static void assertStatesAreEqual(int[][] expected, int[][] actual) {
         assertEquals(expected.length, actual.length, "array length mismatch");
 
