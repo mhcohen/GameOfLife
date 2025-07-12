@@ -3,18 +3,16 @@ package hgl.task.game;
 import hgl.task.game.elements.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.stream.Stream;
 
+import static hgl.task.game.utils.Assert2DArrayEquals.assertStateEquals;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameGridTest {
@@ -83,7 +81,7 @@ class GameGridTest {
 
         Arrays.asList(coordinates).forEach(gameGrid::flip);
 
-        assertStatesAreEqual(expected, gameGrid.getState());
+        assertStateEquals(expected, gameGrid.getState());
     }
 
     public static Stream<Arguments> validFlipScenarios() {
@@ -142,23 +140,5 @@ class GameGridTest {
                 Arguments.of(new boolean[]{false, false, false, false, false, false, true, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(3, 2)}),
                 Arguments.of(new boolean[]{false, false, false, false, false, false, false, true}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(3, 3)})
         );
-    }
-
-    public static void assertStatesAreEqual(int[][] expected, int[][] actual) {
-        assertEquals(expected.length, actual.length, "array length mismatch");
-
-        List<Executable> assertions = new ArrayList<>();
-
-        for (int i = 0; i < expected.length; i++) {
-            assertions.add(assertElementsAreEqual(expected[i], actual[i]));
-        }
-
-        assertAll(
-                assertions.stream()
-        );
-    }
-
-    private static Executable assertElementsAreEqual(int[] expected, int[] actual) {
-        return () -> assertArrayEquals(expected, actual, "array contents mismatch");
     }
 }
