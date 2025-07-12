@@ -17,13 +17,13 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GameOfLifeTest {
+class GameGridTest {
 
-    private GameOfLife gameOfLife;
+    private GameGridFactory gameGridFactory;
 
     @BeforeEach
     void setUp() {
-        gameOfLife = new GameOfLife(new MatrixGameGridFactory());
+        gameGridFactory = new MatrixGameGridFactory();
     }
 
     @ParameterizedTest
@@ -33,7 +33,7 @@ class GameOfLifeTest {
             "1, -1"
     })
     void initialiseGameGrid_whenStartedWithInvalidHeightOrWidth_throwIllegalArgumentException(int height, int width) {
-        assertThrows(IllegalArgumentException.class, () -> gameOfLife.initialiseGameGrid(Height.of(height), Width.of(width)));
+        assertThrows(IllegalArgumentException.class, () -> gameGridFactory.getGameGrid(Height.of(height), Width.of(width)));
     }
 
     @ParameterizedTest
@@ -44,7 +44,7 @@ class GameOfLifeTest {
             "1000, 1000"
     })
     void initialiseGameGrid_whenStartedWithValidHeight_createGridOfExpectedSize(int height, int width) {
-        GameGrid gameGrid = assertDoesNotThrow(() -> gameOfLife.initialiseGameGrid(Height.of(height), Width.of(width)));
+        GameGrid gameGrid = assertDoesNotThrow(() -> gameGridFactory.getGameGrid(Height.of(height), Width.of(width)));
 
         assertAll(
                 () -> assertEquals(height, gameGrid.height()),
@@ -54,7 +54,7 @@ class GameOfLifeTest {
 
     @Test
     void getState_whenNoActiveCellsInGrid_ReturnEmptyArray() {
-        GameGrid gameGrid = gameOfLife.initialiseGameGrid(Height.of(1), Width.of(1));
+        GameGrid gameGrid = gameGridFactory.getGameGrid(Height.of(1), Width.of(1));
 
         assertEquals(Collections.EMPTY_LIST, Arrays.asList(gameGrid.getState()));
     }
@@ -62,7 +62,7 @@ class GameOfLifeTest {
     @ParameterizedTest
     @MethodSource("invalidFlipScenarios")
     void flip_attemptingToFlipAStateThatIsOutOfBounds_ThrowIllegalArgumentException(Height height, Width width, Coordinate coordinate) {
-        GameGrid gameGrid = gameOfLife.initialiseGameGrid(height, width);
+        GameGrid gameGrid = gameGridFactory.getGameGrid(height, width);
 
         assertThrows(IllegalArgumentException.class, () -> gameGrid.flip(coordinate));
     }
@@ -79,7 +79,7 @@ class GameOfLifeTest {
     @ParameterizedTest
     @MethodSource("validFlipScenarios")
     void flip_flippingAValidCell_GameStateReflectsTheFlippedCell(int[][] expected, Height height, Width width, Coordinate... coordinates) {
-        GameGrid gameGrid = gameOfLife.initialiseGameGrid(height, width);
+        GameGrid gameGrid = gameGridFactory.getGameGrid(height, width);
 
         Arrays.asList(coordinates).forEach(gameGrid::flip);
 
@@ -114,7 +114,7 @@ class GameOfLifeTest {
     @ParameterizedTest
     @MethodSource("neighbourScenarios")
     void getNeighbourhood_WhenSuppliedAValidCoordinate_ReturnAllNeighboursStates(boolean[] expected, Height height, Width width, Coordinate coordinate, Coordinate... coordinatesToFlip) {
-        GameGrid gameGrid = gameOfLife.initialiseGameGrid(height, width);
+        GameGrid gameGrid = gameGridFactory.getGameGrid(height, width);
 
         Arrays.asList(coordinatesToFlip).forEach(gameGrid::flip);
 

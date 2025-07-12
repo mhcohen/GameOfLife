@@ -13,6 +13,9 @@ public class MatrixGameGrid implements GameGrid {
     private final boolean[][] grid;
 
     public MatrixGameGrid(Height height, Width width) {
+        if (height.value() <= 0 || width.value() <= 0) {
+            throw new IllegalArgumentException("height and width should be non-negative");
+        }
         this.height = height.value();
         this.width = width.value();
         grid = new boolean[height.value()][width.value()];
