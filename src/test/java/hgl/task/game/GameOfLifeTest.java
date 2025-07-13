@@ -4,6 +4,7 @@ import hgl.task.game.elements.Coordinate;
 import hgl.task.game.elements.Height;
 import hgl.task.game.elements.MatrixGameGridFactory;
 import hgl.task.game.elements.Width;
+import hgl.task.game.output.ConsoleOutputterFactory;
 import hgl.task.game.rules.StandardRulesFactory;
 import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.Test;
@@ -67,5 +68,53 @@ class GameOfLifeTest {
                         Coordinate.of(7, 6))),
                 Arguments.of(Named.of("Start with three live cells all touching, adjacent to a common dead cell, which ends up alive", new int[][]{{1, 1}, {2, 1}, {1, 2}, {2, 2}}), Height.of(200), Width.of(200), Set.of(Coordinate.of(1, 1), Coordinate.of(1, 2), Coordinate.of(2, 1)))
         );
+    }
+
+    @Test
+    void runGame_GosperGliderGun() {
+        GameOfLife gameOfLife = new GameOfLife(new MatrixGameGridFactory(), new StandardRulesFactory(), new ConsoleOutputterFactory())
+                .initialiseGameGrid(Height.of(200), Width.of(200))
+                .initialiseStartingPopulation(
+                        Set.of(
+                                Coordinate.of(2, 6),
+                                Coordinate.of(2, 7),
+                                Coordinate.of(3, 6),
+                                Coordinate.of(3, 7),
+                                Coordinate.of(12, 6),
+                                Coordinate.of(12, 7),
+                                Coordinate.of(12, 8),
+                                Coordinate.of(13, 5),
+                                Coordinate.of(13, 9),
+                                Coordinate.of(14, 4),
+                                Coordinate.of(14, 10),
+                                Coordinate.of(15, 4),
+                                Coordinate.of(15, 10),
+                                Coordinate.of(16, 7),
+                                Coordinate.of(17, 5),
+                                Coordinate.of(17, 9),
+                                Coordinate.of(18, 6),
+                                Coordinate.of(18, 7),
+                                Coordinate.of(18, 8),
+                                Coordinate.of(19, 7),
+                                Coordinate.of(22, 4),
+                                Coordinate.of(22, 5),
+                                Coordinate.of(22, 6),
+                                Coordinate.of(23, 4),
+                                Coordinate.of(23, 5),
+                                Coordinate.of(23, 6),
+                                Coordinate.of(24, 3),
+                                Coordinate.of(24, 7),
+                                Coordinate.of(26, 2),
+                                Coordinate.of(26, 3),
+                                Coordinate.of(26, 7),
+                                Coordinate.of(26, 8),
+                                Coordinate.of(36, 4),
+                                Coordinate.of(36, 5),
+                                Coordinate.of(37, 4),
+                                Coordinate.of(37, 5)
+                        )
+                );
+
+        gameOfLife.runGame(100);
     }
 }

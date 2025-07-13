@@ -1,6 +1,9 @@
 package hgl.task.game;
 
 import hgl.task.game.elements.*;
+import hgl.task.game.output.NonOutputterFactory;
+import hgl.task.game.output.Outputter;
+import hgl.task.game.output.OutputterFactory;
 import hgl.task.game.rules.Rules;
 import hgl.task.game.rules.RulesFactory;
 import org.apache.commons.collections4.SetUtils;
@@ -16,18 +19,18 @@ public class GameOfLife {
 
     private final GameGridFactory gameGridFactory;
     private final Rules rules;
+    private final Outputter outputter;
     private GameGrid gameGrid = null;
     private boolean populated = false;
 
     public GameOfLife(GameGridFactory gameGridFactory, RulesFactory rulesFactory) {
-        this.gameGridFactory = gameGridFactory;
-        this.rules = rulesFactory.getGameRules();
+        this(gameGridFactory, rulesFactory, new NonOutputterFactory());
     }
 
-    public GameOfLife(GameGridFactory gameGridFactory, RulesFactory rulesFactory, Height height, Width width, Set<Coordinate> initialLiveCoordinates) {
-        this(gameGridFactory, rulesFactory);
-        initialiseGameGrid(height, width);
-        initialiseStartingPopulation(initialLiveCoordinates);
+    public GameOfLife(GameGridFactory gameGridFactory, RulesFactory rulesFactory, OutputterFactory outputterFactory) {
+        this.gameGridFactory = gameGridFactory;
+        this.rules = rulesFactory.getGameRules();
+        this.outputter = outputterFactory.getOutputter();
     }
 
     public GameOfLife initialiseGameGrid(Height height, Width width) {
@@ -62,6 +65,7 @@ public class GameOfLife {
         while (i < generationsToRun) {
             int[][] result = takeTurn();
             results.add(result);
+            outputter.output(result);
             if (result.length == 0) break; // extinction
             i++;
         }
