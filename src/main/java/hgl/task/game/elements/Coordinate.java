@@ -29,6 +29,10 @@ public record Coordinate(int x, int y) {
         return y - 1;
     }
 
+    public int[] toIntArray() {
+        return new int[]{x, y};
+    }
+
     @Override
     public String toString() {
         return "Coordinate{" +

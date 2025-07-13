@@ -1,5 +1,7 @@
 package hgl.task.game.rules;
 
+import hgl.task.game.elements.Cell;
+import hgl.task.game.elements.Coordinate;
 import org.junit.jupiter.api.Named;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -17,10 +19,21 @@ class StandardRulesTest {
 
     @ParameterizedTest
     @MethodSource("shouldLiveScenarios")
-    void shouldLive(boolean expected, boolean startState, List<Boolean> neighbours) {
-        boolean actual = standardRules.shouldLive(startState, neighbours);
+    void shouldLive(Boolean expected, Boolean startState, List<Boolean> neighbours) {
+        Cell startCell = stateToCell(startState);
+        List<Cell> neighbourCells = neighbours.stream()
+                .map(StandardRulesTest::stateToCell)
+                .toList();
+
+        boolean actual = standardRules.shouldLive(startCell, neighbourCells);
 
         assertEquals(expected, actual);
+    }
+
+    private static Cell stateToCell(Boolean state) {
+        Cell cell = new Cell(Coordinate.of(0, 0));
+        if (state) cell.transitionState();
+        return cell;
     }
 
     public static Stream<Arguments> shouldLiveScenarios() {

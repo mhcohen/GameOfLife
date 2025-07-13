@@ -3,6 +3,7 @@ package hgl.task.game.utils;
 import org.junit.jupiter.api.function.Executable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,11 +20,12 @@ public class Assert2DArrayEquals {
         }
 
         assertAll(
+                "%s != %s".formatted(Arrays.deepToString(expected), Arrays.deepToString(actual)),
                 assertions.stream()
         );
     }
 
     private static Executable assertElementsAreEqual(int[] expected, int[] actual) {
-        return () -> assertArrayEquals(expected, actual, "array contents mismatch");
+        return () -> assertArrayEquals(expected, actual, "array contents mismatch %s != %s".formatted(Arrays.toString(expected), Arrays.toString(actual)));
     }
 }

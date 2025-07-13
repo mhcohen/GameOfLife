@@ -111,34 +111,36 @@ class GameGridTest {
 
     @ParameterizedTest
     @MethodSource("neighbourScenarios")
-    void getNeighbourhood_WhenSuppliedAValidCoordinate_ReturnAllNeighboursStates(boolean[] expected, Height height, Width width, Coordinate coordinate, Coordinate... coordinatesToFlip) {
+    void getNeighbourhood_WhenSuppliedAValidCoordinate_ReturnAllNeighboursStates(Boolean[] expected, Height height, Width width, Coordinate coordinate, Coordinate... coordinatesToFlip) {
         GameGrid gameGrid = gameGridFactory.getGameGrid(height, width);
 
         Arrays.asList(coordinatesToFlip).forEach(gameGrid::flip);
 
-        boolean[] result = gameGrid.getNeighbourhood(coordinate);
+        Boolean[] result = gameGrid.getNeighbourhood(coordinate).stream()
+                .map(Cell::isAlive)
+                .toArray(Boolean[]::new);
 
         assertArrayEquals(expected, result);
     }
 
     public static Stream<Arguments> neighbourScenarios() {
         return Stream.of(
-                Arguments.of(new boolean[0], Height.of(1), Width.of(1), Coordinate.of(1, 1), new Coordinate[0]),
-                Arguments.of(new boolean[]{false}, Height.of(1), Width.of(2), Coordinate.of(1, 1), new Coordinate[0]),
-                Arguments.of(new boolean[]{false}, Height.of(1), Width.of(2), Coordinate.of(2, 1), new Coordinate[0]),
-                Arguments.of(new boolean[]{false}, Height.of(2), Width.of(1), Coordinate.of(1, 1), new Coordinate[0]),
-                Arguments.of(new boolean[]{false}, Height.of(2), Width.of(1), Coordinate.of(1, 2), new Coordinate[0]),
-                Arguments.of(new boolean[]{false, false, false}, Height.of(2), Width.of(2), Coordinate.of(1, 1), new Coordinate[0]),
-                Arguments.of(new boolean[]{false, false, false, false, false, false, false, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[0]),
-                Arguments.of(new boolean[]{false, false, false, false, false, false, false, false}, Height.of(200), Width.of(200), Coordinate.of(50, 100), new Coordinate[0]),
-                Arguments.of(new boolean[]{true, false, false, false, false, false, false, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(1, 1)}),
-                Arguments.of(new boolean[]{false, true, false, false, false, false, false, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(1, 2)}),
-                Arguments.of(new boolean[]{false, false, true, false, false, false, false, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(1, 3)}),
-                Arguments.of(new boolean[]{false, false, false, true, false, false, false, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(2, 1)}),
-                Arguments.of(new boolean[]{false, false, false, false, true, false, false, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(2, 3)}),
-                Arguments.of(new boolean[]{false, false, false, false, false, true, false, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(3, 1)}),
-                Arguments.of(new boolean[]{false, false, false, false, false, false, true, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(3, 2)}),
-                Arguments.of(new boolean[]{false, false, false, false, false, false, false, true}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(3, 3)})
+                Arguments.of(new Boolean[0], Height.of(1), Width.of(1), Coordinate.of(1, 1), new Coordinate[0]),
+                Arguments.of(new Boolean[]{false}, Height.of(1), Width.of(2), Coordinate.of(1, 1), new Coordinate[0]),
+                Arguments.of(new Boolean[]{false}, Height.of(1), Width.of(2), Coordinate.of(2, 1), new Coordinate[0]),
+                Arguments.of(new Boolean[]{false}, Height.of(2), Width.of(1), Coordinate.of(1, 1), new Coordinate[0]),
+                Arguments.of(new Boolean[]{false}, Height.of(2), Width.of(1), Coordinate.of(1, 2), new Coordinate[0]),
+                Arguments.of(new Boolean[]{false, false, false}, Height.of(2), Width.of(2), Coordinate.of(1, 1), new Coordinate[0]),
+                Arguments.of(new Boolean[]{false, false, false, false, false, false, false, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[0]),
+                Arguments.of(new Boolean[]{false, false, false, false, false, false, false, false}, Height.of(200), Width.of(200), Coordinate.of(50, 100), new Coordinate[0]),
+                Arguments.of(new Boolean[]{true, false, false, false, false, false, false, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(1, 1)}),
+                Arguments.of(new Boolean[]{false, true, false, false, false, false, false, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(1, 2)}),
+                Arguments.of(new Boolean[]{false, false, true, false, false, false, false, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(1, 3)}),
+                Arguments.of(new Boolean[]{false, false, false, true, false, false, false, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(2, 1)}),
+                Arguments.of(new Boolean[]{false, false, false, false, true, false, false, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(2, 3)}),
+                Arguments.of(new Boolean[]{false, false, false, false, false, true, false, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(3, 1)}),
+                Arguments.of(new Boolean[]{false, false, false, false, false, false, true, false}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(3, 2)}),
+                Arguments.of(new Boolean[]{false, false, false, false, false, false, false, true}, Height.of(3), Width.of(3), Coordinate.of(2, 2), new Coordinate[]{new Coordinate(3, 3)})
         );
     }
 }

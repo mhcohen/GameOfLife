@@ -1,16 +1,19 @@
 package hgl.task.game.rules;
 
+import hgl.task.game.elements.Cell;
+
 import java.util.List;
 
 public class StandardRules implements Rules {
 
     @Override
-    public boolean shouldLive(Boolean cell, List<Boolean> neighbours) {
+    public boolean shouldLive(Cell cell, List<Cell> neighbours) {
         int sum = neighbours.stream()
+                .map(Cell::isAlive)
                 .mapToInt(StandardRules::booleanToInt)
                 .sum();
 
-        return shouldLive(cell, sum);
+        return shouldLive(cell.isAlive(), sum);
     }
 
     private static int booleanToInt(boolean bool) {
@@ -23,10 +26,10 @@ public class StandardRules implements Rules {
     Any live cell with more than three live neighbours dies in the next generation, as if by overpopulation.
     Any dead cell with exactly three live neighbours becomes a live cell in the next generation, as if by reproduction.
      */
-    private boolean shouldLive(Boolean cell, int stateValue) {
+    private boolean shouldLive(Boolean isAlive, int stateValue) {
         return switch (stateValue) {
             case 0, 1, 4, 5, 6, 7, 8 -> false;
-            case 2 -> cell && true;
+            case 2 -> isAlive;
             case 3 -> true;
             default -> throw new IllegalStateException("Invalid state: " + stateValue);
         };
